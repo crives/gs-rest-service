@@ -28,18 +28,45 @@ public class GreetingController {
 //		return new Greeting(persistentCounterValue, String.format(template, name));
 //	}
 
-	@GetMapping("/set_count")
-	public Greeting setCount(@RequestParam(value = "value", defaultValue = "0") Long value) {
-		Counter newCounter = counterRepository.findById(1L).orElseGet(() -> new Counter(0L));
-		newCounter.setCounter(value);
-		counterRepository.save(newCounter);
-		return new Greeting(newCounter.getCounter(), "Count value set.");
+
+	@GetMapping("/persistent_greeting")
+	public Greeting persistentGreeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+		Counter persistentCounter = counterRepository.findById("spring_counter").orElseGet(() ->
+				new Counter(0L, "spring_counter"));
+		Long persistentCounterValue = persistentCounter.incrementAndGet();
+		counterRepository.save(persistentCounter);
+		return new Greeting(persistentCounterValue, String.format(template, name));
 	}
 
-	@GetMapping("/get_count")
-	public Greeting getCount() {
-		Counter newCounter = counterRepository.findById(1L).orElseGet(() -> new Counter(0L));
-		return new Greeting(newCounter.getCounter(), "Count value get.");
-	}
+//	@GetMapping("/set_count")
+//	public Greeting setCount(@RequestParam(value = "value", defaultValue = "0") Long value) {
+//		Counter newCounter = counterRepository.findById(1L).orElseGet(() -> new Counter(0L));
+//		newCounter.setCounter(value);
+//		counterRepository.save(newCounter);
+//		return new Greeting(newCounter.getCounter(), "Count value set.");
+//	}
+//
+//	@GetMapping("/get_count")
+//	public Greeting getCount() {
+//		Counter newCounter = counterRepository.findById(1L).orElseGet(() -> new Counter(0L));
+//		return new Greeting(newCounter.getCounter(), "Count value get.");
+//	}
+//
+//	@GetMapping("/set_count_trace")
+//	public Greeting setCountTrace(@RequestParam(value = "value", defaultValue = "0") Long value) {
+//		Counter newCounter = counterRepository.findById(1L).orElseGet(() -> new Counter(0L));
+//		String counterRepositoryOutput = counterRepository.setCounterAndTrace(value);
+//		return new Greeting(Long.parseLong(counterRepositoryOutput.split(",")[1], 10),
+//				String.format("Count value set, on instance %s",
+//						counterRepositoryOutput.split(",")[2]));
+//	}
+//
+//	@GetMapping("/get_count_trace")
+//	public Greeting getCountTrace() {
+//		String counterRepositoryOutput = counterRepository.getCounterAndTrace();
+//		return new Greeting(Long.parseLong(counterRepositoryOutput.split(",")[1], 10),
+//				String.format("Count value get, on instance %s",
+//						counterRepositoryOutput.split(",")[2]));
+//	}
 
 }

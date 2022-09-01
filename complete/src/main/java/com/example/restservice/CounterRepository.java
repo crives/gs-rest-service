@@ -2,4 +2,4 @@ package com.example.restservice;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface CounterRepository extends CrudRepository<Counter, Long> {}
+public interface CounterRepository extends CrudRepository<Counter, String> {}
